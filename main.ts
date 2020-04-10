@@ -1,11 +1,11 @@
-import { Observable,of } from 'rxjs';
+import { Observable,of, Observer } from 'rxjs';
 
 var programmingLanguages = ["Java","C#","Python","Javascript"];
 
 //Observable.from is depreciated
 var source = of("Java","C#","Python","Javascript");
 
-class MyObserver{
+class MyObserver implements Observer<string>{
     
     next(value){
         console.log(`next value is : ${value}`);
