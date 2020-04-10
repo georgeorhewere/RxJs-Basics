@@ -1,0 +1,24 @@
+{
+  "name": "psrxjs5demo",
+  "version": "1.0.0",
+  "description": "demo rxjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --watch --inline",
+    "postinstall": "Typings install"
+  },
+  "author": "Orhewere George",
+  "license": "ISC",
+  "dependencies": {
+    "rxjs": "^6.5.5"
+  },
+  "devDependencies": {
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.8.3",
+    "typings": "^2.1.1",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  }
+}
