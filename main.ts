@@ -5,7 +5,14 @@ var programmingLanguages = ["Java","C#","Python","Javascript"];
 //Observable.from is depreciated
 var source = of("Java","C#","Python","Javascript");
 
-class MyObserver implements Observer<string>{
+
+source.subscribe(
+    value => console.log(`next value is : ${value}`),
+    e =>console.log(`error is : ${e}`),
+    () =>  console.log(`completed data stream`)
+)
+
+/* class MyObserver implements Observer<string>{
     
     next(value){
         console.log(`next value is : ${value}`);
@@ -19,7 +26,7 @@ class MyObserver implements Observer<string>{
     complete(){
         console.log(`completed data stream`);
     }
-}
+} */
 
-source.subscribe(new MyObserver());
-source.subscribe(new MyObserver());
+// source.subscribe(new MyObserver());
+// source.subscribe(new MyObserver());
