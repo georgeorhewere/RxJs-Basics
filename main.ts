@@ -1,4 +1,4 @@
-import { Observable,of, Observer } from 'rxjs';
+import { Observable } from 'rxjs';
 
 var programmingLanguages = ["Java","C#","Python","Javascript"];
 
@@ -7,9 +7,9 @@ var programmingLanguages = ["Java","C#","Python","Javascript"];
 var source = Observable.create(observer =>{
 
     programmingLanguages.forEach(element => {
-        if(element === "Python"){
+       /*  if(element === "Python"){
             observer.error("Something broke my code");
-        }
+        } */
         observer.next(element)
     });
 
@@ -24,21 +24,3 @@ source.subscribe(
     () =>  console.log(`completed data stream`)
 )
 
-/* class MyObserver implements Observer<string>{
-    
-    next(value){
-        console.log(`next value is : ${value}`);
-    }
-
-    error(e){
-        console.log(`error is : ${e}`);
-    }
-
-    
-    complete(){
-        console.log(`completed data stream`);
-    }
-} */
-
-// source.subscribe(new MyObserver());
-// source.subscribe(new MyObserver());
