@@ -1,5 +1,5 @@
 import { Observable,  } from 'rxjs';
-import{ map } from 'rxjs/operators';
+import{ map, filter } from 'rxjs/operators';
 
 var programmingLanguages = ["Java","C#","Python","Javascript"];
 
@@ -22,7 +22,8 @@ var source = Observable.create(observer =>{
     produceValue();
 
 }).pipe(
-    map(x => "I Love " + x)
+    map(x => "I Love " + x),
+    filter(f => (f as string).includes("Java"))
     
     );
 
