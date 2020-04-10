@@ -1,4 +1,5 @@
-import { Observable } from 'rxjs';
+import { Observable,  } from 'rxjs';
+import{ map } from 'rxjs/operators';
 
 var programmingLanguages = ["Java","C#","Python","Javascript"];
 
@@ -20,7 +21,10 @@ var source = Observable.create(observer =>{
 
     produceValue();
 
-});
+}).pipe(
+    map(x => "I Love " + x)
+    
+    );
 
 
 source.subscribe(
