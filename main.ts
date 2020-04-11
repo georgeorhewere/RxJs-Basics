@@ -1,5 +1,5 @@
 import { Observable, fromEvent } from 'rxjs';
-import { map, filter, delay, mergeMap, flatMap, retry } from 'rxjs/operators';
+import { map, filter, delay, mergeMap, flatMap, retry, retryWhen, scan } from 'rxjs/operators';
 
 var programmingLanguages = ["Java", "C#", "Python", "Javascript"];
 
@@ -60,10 +60,22 @@ var load = (url: string) => {
         xhr.open("GET", url);
         xhr.send();
     }).pipe(
-        retry(3)
+        retryWhen(retryStrategy())
     );
 }
 
+let retryStrategy =()=>{
+    return (errors)=>{
+       return errors.pipe(
+           scan((acc,value)=>{
+               console.log(acc,value);
+                return acc + 1;
+           },0),
+           filter(x => x< 4),
+            delay(1000)
+        );
+    }
+}
 var renderBooks = (books) => {
     books.forEach(book => {
         let div = document.createElement("div");
