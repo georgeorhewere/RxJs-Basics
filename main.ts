@@ -1,4 +1,4 @@
-import { Observable, fromEvent } from 'rxjs';
+import { Observable, fromEvent, from } from 'rxjs';
 import { map, filter, delay, mergeMap, flatMap, retry, retryWhen, scan, takeWhile } from 'rxjs/operators';
 
 var programmingLanguages = ["Java", "C#", "Python", "Javascript"];
@@ -64,6 +64,11 @@ var load = (url: string) => {
     );
 }
 
+var loadWithFetch = (url:string)=> {
+
+    return from(fetch(url).then(r => r.json()));
+}
+
 let retryStrategy = ({ attempts = 3, waitTime = 1000 }) => {
     return (errors) => {
         return errors.pipe(
@@ -88,7 +93,7 @@ var renderBooks = (books) => {
 load("books.json").subscribe(renderBooks);
 
 clickProcess.pipe(
-    flatMap(e => load("books.json"))
+    flatMap(e => loadWithFetch("books.json"))
 )
     .subscribe(
         renderBooks,
