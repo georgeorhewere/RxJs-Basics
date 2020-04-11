@@ -85,10 +85,10 @@ var renderBooks = (books) => {
 }
 
 //load books on start
-//load("bookss.json").subscribe(renderBooks);
+load("books.json").subscribe(renderBooks);
 
 clickProcess.pipe(
-    flatMap(e => load("bookss.json"))
+    flatMap(e => load("books.json"))
 )
     .subscribe(
         renderBooks,
