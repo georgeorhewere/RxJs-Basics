@@ -1,5 +1,5 @@
 import { Observable, fromEvent } from 'rxjs';
-import { map, filter, delay,mergeMap,flatMap } from 'rxjs/operators';
+import { map, filter, delay, mergeMap, flatMap, retry } from 'rxjs/operators';
 
 var programmingLanguages = ["Java", "C#", "Python", "Javascript"];
 
@@ -8,7 +8,6 @@ let circle = document.getElementById("circle");
 // get refernce to the list div and button
 let bookList = document.getElementById("bookList");
 let bookBtn = document.getElementById("bookBtn");
-
 var clickProcess = fromEvent(bookBtn, 'click');
 
 
@@ -48,17 +47,24 @@ var load = (url: string) => {
 
         xhr.addEventListener("load", () => {
             // get generic data
-            let data = JSON.parse(xhr.responseText);
-            observer.next(data);
-            observer.complete();            
+            if (xhr.status === 200) {
+                let data = JSON.parse(xhr.responseText);
+                observer.next(data);
+                observer.complete();
+            } else {
+                observer.error(xhr.statusText);
+
+            }
         })
 
         xhr.open("GET", url);
         xhr.send();
-    });
+    }).pipe(
+        retry(3)
+    );
 }
 
-var renderBooks = (books) =>{
+var renderBooks = (books) => {
     books.forEach(book => {
         let div = document.createElement("div");
         div.innerText = book.title + " by " + book.author;
@@ -67,14 +73,14 @@ var renderBooks = (books) =>{
 }
 
 //load books on start
-load("books.json").subscribe(renderBooks);
+//load("bookss.json").subscribe(renderBooks);
 
 clickProcess.pipe(
-flatMap(e => load("books.json"))
+    flatMap(e => load("bookss.json"))
 )
-.subscribe(
-    renderBooks,
-    e => console.log(`error is : ${e}`),
-    () => console.log(`completed data stream`)
-)
+    .subscribe(
+        renderBooks,
+        e => console.log(`error is : ${e}`),
+        () => console.log(`completed data stream`)
+    )
 
