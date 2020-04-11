@@ -1,11 +1,21 @@
-import { Observable,  } from 'rxjs';
-import{ map, filter } from 'rxjs/operators';
+import { Observable, fromEvent  } from 'rxjs';
+import{ map, filter, delay } from 'rxjs/operators';
 
 var programmingLanguages = ["Java","C#","Python","Javascript"];
 
-//Observable.from is depreciated
-// var source = of("Java","C#","Python","Javascript");
-var source = Observable.create(observer =>{
+let circle = document.getElementById("circle");
+var source = fromEvent(document,'mousemove')
+                .pipe(
+                    map((e:MouseEvent)=>{
+                        return {
+                            x: e.clientX,
+                            y:e.clientY
+                        }
+                    }),
+                    filter(evt => evt.x < 500),
+                    delay(400)
+                );
+/* Observable.create(observer =>{
 
     let index =0;
     let produceValue = () =>{
@@ -26,10 +36,15 @@ var source = Observable.create(observer =>{
     filter(f => (f as string).includes("Java"))
     
     );
+ */
+var onNext =(value)=>{
+    circle.style.left = value.x;
+    circle.style.top = value.y;
 
+}
 
 source.subscribe(
-    value => console.log(`next value is : ${value}`),
+    onNext,
     e =>console.log(`error is : ${e}`),
     () =>  console.log(`completed data stream`)
 )
