@@ -1,7 +1,7 @@
-import { Observable, fromEvent  } from 'rxjs';
-import{ map, filter, delay } from 'rxjs/operators';
+import { Observable, fromEvent } from 'rxjs';
+import { map, filter, delay,mergeMap,flatMap } from 'rxjs/operators';
 
-var programmingLanguages = ["Java","C#","Python","Javascript"];
+var programmingLanguages = ["Java", "C#", "Python", "Javascript"];
 
 //get reference to the circle div
 let circle = document.getElementById("circle");
@@ -9,11 +9,11 @@ let circle = document.getElementById("circle");
 let bookList = document.getElementById("bookList");
 let bookBtn = document.getElementById("bookBtn");
 
-var clickProcess = fromEvent(bookBtn,'click');
-           
+var clickProcess = fromEvent(bookBtn, 'click');
 
- 
-                
+
+
+
 /* Observable.create(observer =>{
 
     let index =0;
@@ -36,30 +36,45 @@ var clickProcess = fromEvent(bookBtn,'click');
     
     );
  */
-var onNext =(value)=>{
+var onNext = (value) => {
     circle.style.left = value.x;
     circle.style.top = value.y;
 }
 
-var load = (url : string) => {
-    let xhr = new XMLHttpRequest();
+var load = (url: string) => {
 
-    xhr.addEventListener("load",()=>{
-        let books = JSON.parse(xhr.responseText);
-        books.forEach(book=>{
-            let div = document.createElement("div");
-            div.innerText = book.title + " by "+ book.author;
-            bookList.appendChild(div);
+    return Observable.create(observer => {
+        let xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("load", () => {
+            // get generic data
+            let data = JSON.parse(xhr.responseText);
+            observer.next(data);
+            observer.complete();            
         })
-    })
 
-    xhr.open("GET", url);
-    xhr.send();
+        xhr.open("GET", url);
+        xhr.send();
+    });
 }
 
-clickProcess.subscribe(
-    e => load("books.json"),
-    e =>console.log(`error is : ${e}`),
-    () =>  console.log(`completed data stream`)
+var renderBooks = (books) =>{
+    books.forEach(book => {
+        let div = document.createElement("div");
+        div.innerText = book.title + " by " + book.author;
+        bookList.appendChild(div);
+    });
+}
+
+//load books on start
+load("books.json").subscribe(renderBooks);
+
+clickProcess.pipe(
+flatMap(e => load("books.json"))
+)
+.subscribe(
+    renderBooks,
+    e => console.log(`error is : ${e}`),
+    () => console.log(`completed data stream`)
 )
 
