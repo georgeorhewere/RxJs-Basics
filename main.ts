@@ -1,18 +1,36 @@
-import { Observable, fromEvent, from, defer } from 'rxjs';
-import { map, filter, delay, mergeMap, flatMap, retry, retryWhen, scan, takeWhile } from 'rxjs/operators';
+import { Observable, fromEvent, from, defer, merge, of, throwError } from 'rxjs';
+import { map, filter, delay, mergeMap, flatMap, retry, retryWhen, scan, takeWhile, catchError } from 'rxjs/operators';
 import { loadWithFetch } from './loader';
 
 
-let source = Observable.create(observer =>{
-    observer.next("James");
-    observer.next("Jude");
-    observer.next("John");
-    observer.error("Stop Immediately !");
-    observer.next("Samson");
-});
+let source = merge(
+    of("Samantha"),
+    from(["Lucas", "Fred", "Harry","Channel"]),
+    throwError(new Error("Error condition 1")),
+    of("Olumide"),   
+
+).pipe(    
+        catchError(e =>{          
+            console.log(`Caught ${e}`)
+            return of("David afer the error")
+        }
+        )
+    
+)
+
+
+// Observable.create(observer =>{
+//     observer.next("James");
+//     observer.next("Jude");
+//     observer.next("John");
+//     observer.error("Stop Immediately !");
+//     observer.next("Samson");
+// });
 
 source.subscribe(
     value=> console.log(`value is ${value}`),
+    error => console.log(`error is : ${error}`),
+    ()=> console.log("completed")
 )
 /*var programmingLanguages = ["Java", "C#", "Python", "Javascript"];
 
