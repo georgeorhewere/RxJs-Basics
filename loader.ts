@@ -35,14 +35,19 @@ export var loadWithFetch = (url: string) => {
             }else{
                 return Promise.reject(r)
             }
-        }
-        ));
+        },
+        
+
+        ))
+        .pipe(
+            retryWhen(retryStrategy())
+        );
     });
 
 
 }
 
-let retryStrategy = ({ attempts = 3, waitTime = 1000 }) => {
+let retryStrategy = ({ attempts = 3, waitTime = 1000 }={}) => {
     return (errors) => {
         return errors.pipe(
             scan((acc, value) => {
