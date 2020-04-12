@@ -38,11 +38,10 @@ export var loadWithFetch = (url: string) => {
         },
         
 
-        ))
-        .pipe(
-            retryWhen(retryStrategy())
-        );
-    });
+        ));
+    }).pipe(
+        retryWhen(retryStrategy())
+    );
 
 
 }
@@ -51,8 +50,14 @@ let retryStrategy = ({ attempts = 3, waitTime = 1000 }={}) => {
     return (errors) => {
         return errors.pipe(
             scan((acc, value) => {
-                console.log(acc, value);
-                return acc + 1;
+                acc += 1;
+                if(acc < attempts){
+                    return acc;
+                }else{                    
+                    throw new Error(`${value}`);
+
+                }
+                
             }, 0),
             takeWhile(x => x < attempts),
             delay(waitTime)
