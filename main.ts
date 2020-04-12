@@ -1,22 +1,23 @@
-import { Observable, fromEvent, from, defer, merge, of, throwError } from 'rxjs';
+import { Observable, fromEvent, from, defer, merge, of, throwError, onErrorResumeNext } from 'rxjs';
 import { map, filter, delay, mergeMap, flatMap, retry, retryWhen, scan, takeWhile, catchError } from 'rxjs/operators';
 import { loadWithFetch } from './loader';
 
 
-let source = merge(
+let source = onErrorResumeNext(
     of("Samantha"),
     from(["Lucas", "Fred", "Harry","Channel"]),
     throwError(new Error("Error condition 1")),
     of("Olumide"),   
 
-).pipe(    
-        catchError(e =>{          
-            console.log(`Caught ${e}`)
-            return of("David afer the error")
-        }
-        )
-    
 )
+// .pipe(    
+//         catchError(e =>{          
+//             console.log(`Caught ${e}`)
+//             return of("David afer the error")
+//         }
+//         )
+    
+// )
 
 
 // Observable.create(observer =>{
