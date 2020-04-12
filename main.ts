@@ -1,7 +1,20 @@
 import { Observable, fromEvent, from, defer } from 'rxjs';
 import { map, filter, delay, mergeMap, flatMap, retry, retryWhen, scan, takeWhile } from 'rxjs/operators';
+import { loadWithFetch } from './loader';
 
-var programmingLanguages = ["Java", "C#", "Python", "Javascript"];
+
+let source = Observable.create(observer =>{
+    observer.next("James");
+    observer.next("Jude");
+    observer.next("John");
+    observer.error("Stop Immediately !");
+    observer.next("Samson");
+});
+
+source.subscribe(
+    value=> console.log(`value is ${value}`),
+)
+/*var programmingLanguages = ["Java", "C#", "Python", "Javascript"];
 
 //get reference to the circle div
 let circle = document.getElementById("circle");
@@ -13,7 +26,7 @@ var clickProcess = fromEvent(bookBtn, 'click');
 
 
 
-/* Observable.create(observer =>{
+ Observable.create(observer =>{
 
     let index =0;
     let produceValue = () =>{
@@ -34,57 +47,13 @@ var clickProcess = fromEvent(bookBtn, 'click');
     filter(f => (f as string).includes("Java"))
     
     );
- */
+ 
 var onNext = (value) => {
     circle.style.left = value.x;
     circle.style.top = value.y;
 }
 
-var load = (url: string) => {
 
-    return Observable.create(observer => {
-        let xhr = new XMLHttpRequest();
-
-        xhr.addEventListener("load", () => {
-            // get generic data
-            if (xhr.status === 200) {
-                let data = JSON.parse(xhr.responseText);
-                observer.next(data);
-                observer.complete();
-            } else {
-                observer.error(xhr.statusText);
-
-            }
-        })
-
-        xhr.open("GET", url);
-        xhr.send();
-    }).pipe(
-        retryWhen(retryStrategy({ attempts: 3, waitTime: 1500 }))
-    );
-}
-
-var loadWithFetch = (url:string)=> {
-
-    return defer(() => {
-        return from(fetch(url).then(r => r.json()));
-    });
-
-    
-}
-
-let retryStrategy = ({ attempts = 3, waitTime = 1000 }) => {
-    return (errors) => {
-        return errors.pipe(
-            scan((acc, value) => {
-                console.log(acc, value);
-                return acc + 1;
-            }, 0),
-            takeWhile(x => x < attempts),
-            delay(waitTime)
-        );
-    }
-}
 var renderBooks = (books) => {
     books.forEach(book => {
         let div = document.createElement("div");
@@ -106,3 +75,4 @@ clickProcess.pipe(
         () => console.log(`completed data stream`)
     )
 
+*/
