@@ -26,13 +26,20 @@ export var load = (url: string) => {
     );
 }
 
-export var loadWithFetch = (url:string)=> {
+export var loadWithFetch = (url: string) => {
 
     return defer(() => {
-        return from(fetch(url).then(r => r.json()));
+        return from(fetch(url).then(r => {
+            if (r.status === 200) {
+                return r.json()
+            }else{
+                return Promise.reject(r)
+            }
+        }
+        ));
     });
 
-    
+
 }
 
 let retryStrategy = ({ attempts = 3, waitTime = 1000 }) => {

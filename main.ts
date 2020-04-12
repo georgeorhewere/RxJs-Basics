@@ -3,13 +3,13 @@ import { map, filter, delay, mergeMap, flatMap, retry, retryWhen, scan, takeWhil
 import { loadWithFetch } from './loader';
 
 
-let source = onErrorResumeNext(
-    of("Samantha"),
-    from(["Lucas", "Fred", "Harry","Channel"]),
-    throwError(new Error("Error condition 1")),
-    of("Olumide"),   
+// let source = onErrorResumeNext(
+//     of("Samantha"),
+//     from(["Lucas", "Fred", "Harry","Channel"]),
+//     throwError(new Error("Error condition 1")),
+//     of("Olumide"),   
 
-)
+// )
 // .pipe(    
 //         catchError(e =>{          
 //             console.log(`Caught ${e}`)
@@ -28,12 +28,12 @@ let source = onErrorResumeNext(
 //     observer.next("Samson");
 // });
 
-source.subscribe(
-    value=> console.log(`value is ${value}`),
-    error => console.log(`error is : ${error}`),
-    ()=> console.log("completed")
-)
-/*var programmingLanguages = ["Java", "C#", "Python", "Javascript"];
+// source.subscribe(
+//     value=> console.log(`value is ${value}`),
+//     error => console.log(`error is : ${error}`),
+//     ()=> console.log("completed")
+// )
+var programmingLanguages = ["Java", "C#", "Python", "Javascript"];
 
 //get reference to the circle div
 let circle = document.getElementById("circle");
@@ -82,8 +82,11 @@ var renderBooks = (books) => {
 }
 
 //load books on start
-loadWithFetch("books.json")
-.subscribe(renderBooks);
+loadWithFetch("bookss.json")
+.subscribe(renderBooks,
+    e=>console.log(`error is  ${e}`),
+    ()=> console.log(`compleed`)
+    );
 
 clickProcess.pipe(
     flatMap(e => loadWithFetch("books.json"))
@@ -94,4 +97,4 @@ clickProcess.pipe(
         () => console.log(`completed data stream`)
     )
 
-*/
+/**/
