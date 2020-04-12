@@ -1,6 +1,6 @@
 import { Observable, fromEvent, from, defer, merge, of, throwError, onErrorResumeNext } from 'rxjs';
 import { map, filter, delay, mergeMap, flatMap, retry, retryWhen, scan, takeWhile, catchError } from 'rxjs/operators';
-import { loadWithFetch } from './loader';
+import { loadWithFetch, load } from './loader';
 
 
 // let source = onErrorResumeNext(
@@ -82,11 +82,15 @@ var renderBooks = (books) => {
 }
 
 //load books on start
-loadWithFetch("bookss.json")
+var loadSubscription = load("bookss.json")
 .subscribe(renderBooks,
     e=>console.log(`error is  ${e}`),
     ()=> console.log(`compleed`)
     );
+
+console.log(loadSubscription);
+ // loadSubscription.unsubscribe();
+
 
 clickProcess.pipe(
     flatMap(e => loadWithFetch("books.json"))

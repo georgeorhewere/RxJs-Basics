@@ -7,7 +7,7 @@ export var load = (url: string) => {
     return Observable.create(observer => {
         let xhr = new XMLHttpRequest();
 
-        xhr.addEventListener("load", () => {
+        let onLoad = () => {
             // get generic data
             if (xhr.status === 200) {
                 let data = JSON.parse(xhr.responseText);
@@ -17,10 +17,19 @@ export var load = (url: string) => {
                 observer.error(xhr.statusText);
 
             }
-        })
+        }
+        xhr.addEventListener("load", onLoad);
 
         xhr.open("GET", url);
         xhr.send();
+
+        return ()=>{
+            console.log("cleanup ");
+            xhr.removeEventListener("load",onLoad);
+            xhr.abort();
+        }
+
+
     }).pipe(
         retryWhen(retryStrategy({ attempts: 3, waitTime: 1500 }))
     );
